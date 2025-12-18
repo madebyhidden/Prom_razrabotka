@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: denis             
+      POSTGRES_PASSWORD: zakharov        
+      POSTGRES_DB: expansionoflife
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  jupyter:
+    build: ./jupyter                   
+    ports:
+      - "9191:8888"                   
+    volumes:
+      - ./notebooks:/home/jovyan/work 
+    depends_on:
+      - db                            
+    environment:
+      - DB_HOST=db
+      - DB_NAME=expansionoflife              
+      - DB_USER=denis                   
+      - DB_PASS=zakharov            
+
+volumes:
+  pgdata:
